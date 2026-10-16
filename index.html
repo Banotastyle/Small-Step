@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مساحة أمان — خطوة صغيرة تكفي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbf8f1;--card:#fff;--ink:#23322d;--mute:#5f6f69;--g:#3f8a6e;--gl:#e3f1ea;--b:#dff0f7;--gold:#c8a24a;--line:#e7e2d4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14201c;--card:#1d2d28;--ink:#eaf2ee;--mute:#a3b5ad;--g:#6cc2a0;--gl:#24403a;--b:#1f3a46;--gold:#e0bd6a;--line:#2e4540}}
+:root[data-theme="dark"]{--bg:#14201c;--card:#1d2d28;--ink:#eaf2ee;--mute:#a3b5ad;--g:#6cc2a0;--gl:#24403a;--b:#1f3a46;--gold:#e0bd6a;--line:#2e4540}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.8 Cairo,Tahoma,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{max-width:980px;margin:auto;padding:8px 14px;display:flex;gap:8px;align-items:center}
+.logo{font-weight:800;color:var(--g);white-space:nowrap}
+nav{display:flex;gap:4px;overflow-x:auto;flex:1}
+nav button{border:0;background:none;color:var(--mute);font:600 15px Cairo,sans-serif;padding:6px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--gl);color:var(--g)}
+main{max-width:980px;margin:auto;padding:20px 14px 60px}
+section{display:none}section.on{display:block}
+h1{font-size:clamp(26px,5vw,40px);line-height:1.5;margin:10px 0 6px;font-weight:800}
+h2{font-size:22px;margin:24px 0 8px}h3{margin:0 0 6px;font-size:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin:12px 0}
+.hero{background:linear-gradient(135deg,var(--gl),var(--b));border-radius:28px;padding:28px 20px;border:1px solid var(--line)}
+.gold{border-inline-start:4px solid var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+button,.btn{font:600 16px Cairo,sans-serif;cursor:pointer}
+.opt,.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:16px;padding:12px 14px;text-align:start;transition:.2s}
+.opt:hover,.btn:hover{border-color:var(--g)}
+.opt.on,.btn.pri{background:var(--g);color:#fff;border-color:var(--g)}
+.btn.pri{color:#06241a}:root[data-theme="light"] .btn.pri,.btn.pri{color:#fff}
+.btn.sm{padding:4px 10px;font-size:14px;border-radius:10px}
+input,textarea,select{width:100%;font:400 16px Cairo,sans-serif;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+textarea{min-height:90px}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>input{flex:1;min-width:140px}
+.mute{color:var(--mute);font-size:15px}
+.item{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+.item span{flex:1}.item.done span{text-decoration:line-through;color:var(--mute)}
+.chat{max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:6px}
+.m{padding:10px 14px;border-radius:18px;max-width:85%}
+.m.u{background:var(--gl);align-self:flex-start}.m.a{background:var(--b);align-self:flex-end}
+.note{background:var(--b);border-radius:14px;padding:10px 14px;font-size:15px}
+#orb{width:130px;height:130px;border-radius:50%;margin:16px auto;background:radial-gradient(circle,var(--b),var(--g));display:grid;place-items:center;color:#fff;font-weight:800;transition:transform 4s ease-in-out}
+#timer{font-size:54px;font-weight:800;text-align:center;color:var(--g);font-variant-numeric:tabular-nums}
+.prog{height:14px;background:var(--gl);border-radius:99px;overflow:hidden}.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--g),var(--gold));transition:width .6s}
+.toast{position:fixed;inset-inline:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:420px;margin:auto;background:var(--g);color:#fff;padding:12px 16px;border-radius:16px;display:none;z-index:9;text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="bar"><span class="logo">🌿 مساحة أمان</span>
+<nav id="nav"></nav><button class="btn sm" id="theme" aria-label="تبديل الوضع الليلي">🌙</button></div></header>
+<main>
+
+<section id="home" class="on">
+ <div class="hero"><p class="mute">إنت مش لوحدك</p><h1 id="greet"></h1></div>
+ <h2>عامل إيه بجد النهارده؟</h2>
+ <div class="grid" id="moods"></div>
+ <div class="card gold" id="moodOut" hidden></div>
+</section>
+
+<section id="now">
+ <h1>حالتي الآن</h1>
+ <h2>رسالة تناسب حالتي</h2>
+ <div class="grid" id="sits"></div>
+ <div class="card" id="msgOut" hidden></div>
+ <h2>خطة يومية على قد طاقتي</h2>
+ <div class="row" id="energies"></div>
+ <div class="card" id="planBox" hidden>
+  <p class="mute">الخطة دي مرنة. عدّل فيها زي ما تحب، والراحة جزء من اليوم مش وقت ضايع.</p>
+  <div id="plan"></div>
+  <div class="row" style="margin-top:8px"><input id="planIn" placeholder="أضف حاجة للخطة" aria-label="بند جديد"><button class="btn" id="planAdd">أضف</button></div>
+ </div>
+</section>
+
+<section id="chatS">
+ <h1>اتكلم براحتك</h1>
+ <div class="note" id="aiNote">⚠️ دي ردود جاهزة مكتوبة مسبقًا، <b>مش ذكاء اصطناعي</b> ومش بديل عن مختص نفسي. لو حابب تحويلها لمحادثة بالذكاء الاصطناعي لازم يتوصل خادم آمن يخبّي مفتاح الـAPI (مش في كود الصفحة).</div>
+ <div class="card"><div class="chat" id="chat" aria-live="polite"></div>
+  <div class="row" style="margin-top:10px"><input id="chatIn" placeholder="اكتب اللي جواك..." aria-label="رسالتك"><button class="btn pri" id="send">ابعت</button></div>
+  <p class="mute">اللي بتكتبه هنا بيفضل على جهازك ومش بيتبعت لأي حد.</p></div>
+</section>
+
+<section id="study">
+ <h1>مذاكرة بدون ضغط</h1>
+ <div class="card gold" id="studyMsg">مش مطلوب منك تخلص كل المنهج النهارده. المطلوب إنك تعمل اللي تقدر عليه وتدي نفسك فرصة.</div>
+ <div class="card"><h3>مهمة جديدة</h3>
+  <div class="row"><input id="tSub" placeholder="المادة (مثلاً: أحياء)" aria-label="المادة"><input id="tName" placeholder="الدرس أو المهمة" aria-label="المهمة"><button class="btn pri" id="tAdd">أضف</button></div>
+  <p class="mute" id="tErr" role="alert"></p></div>
+ <div class="card"><div id="tasks"></div><div class="row" style="margin-top:10px"><button class="btn pri" id="smallest">ابدأ بأصغر خطوة</button></div></div>
+ <div class="card"><h3>المؤقت</h3>
+  <div id="timer">10:00</div>
+  <div class="row" id="mins" style="justify-content:center"></div>
+  <div class="row" style="justify-content:center;margin-top:10px"><button class="btn pri" id="tStart">ابدأ</button><button class="btn" id="tEnd">أنهي دلوقتي من غير ذنب</button></div>
+  <p class="mute" id="tNote" style="text-align:center"></p></div>
+</section>
+
+<section id="calm">
+ <h1>خلينا نرجع لنفسنا</h1>
+ <p class="mute">كل حاجة هنا اختيارية، ومفيش أصوات.</p>
+ <div class="card"><h3>تنفّس دقيقة</h3><div id="orb">جاهز</div>
+  <div class="row" style="justify-content:center"><button class="btn pri" id="bStart">ابدأ التنفس</button><button class="btn" id="bStop">وقّف</button></div></div>
+ <div class="card"><h3>ارجع للحظة الحالية</h3><p>سمّي بصوت داخلي: 5 حاجات شايفها، 4 حاجات تقدر تلمسها، 3 حاجات سامعها، حاجتين تشمهم، وحاجة واحدة تحس بطعمها. خد وقتك.</p></div>
+ <div class="card"><div class="row"><button class="btn" id="calmBtn">عايز أهدى شوية</button><button class="btn" id="lessBtn">مش لازم أعمل كل حاجة دلوقتي</button></div><div id="calmOut" style="margin-top:10px"></div></div>
+ <div class="card"><h3>فضفض على الورق</h3>
+  <label class="mute" for="w1">إيه اللي مضايقني؟</label><textarea id="w1"></textarea>
+  <label class="mute" for="w2">إيه اللي أقدر أعمله دلوقتي؟</label><textarea id="w2"></textarea>
+  <p class="mute">بيتحفظ تلقائيًا على جهازك فقط.</p></div>
+</section>
+
+<section id="diary">
+ <h1>يومياتي</h1>
+ <div class="note">بتتحفظ في متصفحك على جهازك فقط، من غير حساب. لو مسحت بيانات المتصفح أو غيّرت الجهاز هتضيع.</div>
+ <div class="card"><label class="mute" for="dQ">سؤال (اختياري)</label><select id="dQ"></select>
+  <textarea id="dT" aria-label="نص التدوينة" style="margin-top:8px"></textarea>
+  <div class="row" style="margin-top:8px"><button class="btn pri" id="dSave">احفظ</button><button class="btn" id="dCancel" hidden>إلغاء التعديل</button></div>
+  <p class="mute" id="dErr" role="alert"></p></div>
+ <div id="dList"></div>
+</section>
+
+<section id="prog">
+ <h1>تقدمي</h1>
+ <p class="mute">مفيش مقارنة ولا سلاسل بتضغط عليك. كل حاجة بتعملها محسوبة.</p>
+ <div class="card"><div class="prog" aria-hidden="true"><i id="pBar"></i></div><p id="pTxt"></p></div>
+ <div class="card"><h3>سجّل إنجاز</h3><div class="grid" id="achBtns"></div></div>
+ <div class="card"><h3>آخر الإنجازات</h3><div id="achList"></div></div>
+</section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let S={tasks:[],diary:[],ach:[],chat:[],plan:[],w1:"",w2:"",theme:""};
+try{Object.assign(S,JSON.parse(localStorage.getItem("amaan")||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem("amaan",JSON.stringify(S))}catch(e){}};
+const uid=()=>Date.now()+Math.random().toString(36).slice(2,6);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const esc=t=>{const d=document.createElement("div");d.textContent=t;return d.innerHTML};
+const fmt=t=>new Date(t).toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long"});
+function toast(t){const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",3200)}
+
+/* nav */
+const tabs=[["home","الرئيسية"],["now","حالتي الآن"],["chatS","رفيقي الذكي"],["study","المذاكرة"],["calm","مساحة الهدوء"],["diary","يومياتي"],["prog","تقدمي"]];
+$("#nav").innerHTML=tabs.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join("");
+function go(id){$$("section").forEach(s=>s.classList.toggle("on",s.id===id));$$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===id));scrollTo(0,0);if(id==="prog")renderProg()}
+$("#nav").onclick=e=>{if(e.target.dataset.t)go(e.target.dataset.t)};
+function theme(t){if(t)document.documentElement.dataset.theme=t;$("#theme").textContent=document.documentElement.dataset.theme==="dark"?"☀️":"🌙"}
+$("#theme").onclick=()=>{const d=document.documentElement.dataset.theme==="dark"||(!document.documentElement.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);S.theme=d?"light":"dark";theme(S.theme);save()};
+if(S.theme)theme(S.theme);
+
+/* achievements */
+const ACH=["بدأت المذاكرة رغم عدم وجود حماس","أنهيت مهمة صغيرة","أخدت راحة كنت محتاجها","طلبت مساعدة لما احتجتها","التزمت بخطة مناسبة لطاقتي"];
+function logAch(t){S.ach.unshift({id:uid(),t,d:Date.now()});save()}
+
+/* home */
+const greets=["خد نفس عميق... مش لازم تصلح كل حاجة النهارده. خلينا نبدأ بحاجة صغيرة.","مش لازم تكون بخير طول الوقت. كفاية إنك هنا دلوقتي.","النهارده ممكن يبقى بسيط. ومفيش مشكلة في كده."];
+$("#greet").textContent=pick(greets);
+const MOODS={
+"حاسس بإحباط":["الإحباط تقيل، وده مش معناه إنك ضعيف. ممكن تكون تعبت وانت بتحاول.","اكتب سطر واحد: إيه اللي أحبطك بالظبط؟ مش لازم تحله دلوقتي."],
+"مضغوط من المذاكرة":["الضغط ده إشارة إن في حمل كبير على كتافك، وده طبيعي.","اختار حاجة واحدة بس، وقسّمها لخطوة 10 دقايق. الباقي يستنى."],
+"مش قادر أركز":["التركيز بيروح لما الدماغ يبقى مرهق أو مشغول. مش عيب فيك.","قوم اشرب مية وحرّك جسمك دقيقتين، وبعدين جرب مؤقت 5 دقايق بس."],
+"قلقان من المستقبل":["القلق بيحاول يحميك، بس بيسبقك لحاجات لسه ماحصلتش.","اكتب حاجة واحدة بس تقدر تعملها النهارده، وسيب الباقي لبكره."],
+"محتاج أتكلم وأفضفض":["أنا سامعك. مفيش حكم ولا نصايح لازم.","روح لقسم «رفيقي الذكي» وفضفض براحتك، أو كلم حد قريب منك تثق فيه."],
+"حاسس إني كويس ومستعد أبدأ":["حلو. استغل الإحساس ده من غير ما تزق نفسك.","ابدأ بمهمة صغيرة واضحة، وخلّي الباقي لو لقيت نفسك كمّلت."]};
+$("#moods").innerHTML=Object.keys(MOODS).map(k=>`<button class="opt">${k}</button>`).join("");
+$("#moods").onclick=e=>{const k=e.target.textContent;if(!MOODS[k])return;$$("#moods .opt").forEach(b=>b.classList.toggle("on",b===e.target));const o=$("#moodOut");o.hidden=false;o.innerHTML=`<p>${MOODS[k][0]}</p><p><b>اقتراح بسيط:</b> ${MOODS[k][1]}</p><p class="mute">لو الإحساس ده مكمّل معاك فترة طويلة، كلام مع مختص أو شخص موثوق ممكن يفرق.</p>`}
+
+/* messages library */
+const SIT={
+"حاسس إني متأخر عن غيري":["كل واحد ماشي في طريق مختلف وظروف مختلفة. المقارنة بتديك صورة ناقصة.","ابدأ من النقطة اللي إنت فيها. دي مش نقطة ضعف، دي نقطة بداية."],
+"فقدت الرغبة في المذاكرة":["الرغبة مش شرط للبداية. أوقات بتيجي بعد أول خطوة مش قبلها.","جرب 5 دقايق بس. ولو وقفت بعدها، يبقى عملت حاجة."],
+"خايف من الامتحانات":["الخوف معناه إن الموضوع فارق معاك. ده طبيعي.","الامتحان بيقيس حاجات معينة في وقت معين، مش قيمتك كإنسان."],
+"ماحققتش هدفي":["الفشل في هدف مش حكم عليك. ده وجع حقيقي، ومن حقك تحس بيه.","لما تهدا شوية، اسأل نفسك: إيه اللي أقدر أتعلمه من اللي حصل؟"],
+"حاسس إن مجهودي مش كفاية":["إنت مش شايف كل اللي عملته لأنك مركز على اللي لسه.","النهارده كفاية على قد طاقتك."],
+"محتاج راحة":["الراحة مش مكافأة، دي جزء من الشغل.","نام أو اتمشى أو اشرب حاجة دافية من غير ما تحاسب نفسك."],
+"عايز بداية جديدة":["ممكن تبدأ من جديد في أي ساعة، مش لازم أول الأسبوع.","اختار خطوة واحدة صغيرة جدًا، وخلّيها سهلة لدرجة إنك مش هتقدر تقول لأ."],
+"محتاج أفتكر قيمتي":["قيمتك مش درجاتك ولا إنتاجيتك. إنت مهم لأنك إنت.","افتكر حد استفاد من وجودك أو طيبتك، ده كمان بيحسب."]};
+$("#sits").innerHTML=Object.keys(SIT).map(k=>`<button class="opt">${k}</button>`).join("");
+$("#sits").onclick=e=>{const k=e.target.textContent;if(!SIT[k])return;const o=$("#msgOut");o.hidden=false;o.innerHTML=`<p><b>${k}</b></p><p>${SIT[k][0]}</p><p>${SIT[k][1]}</p>`}
+
+/* energy plan */
+const EN={"طاقتي منخفضة":["شرب مية وفطار خفيف","دقيقة تنفس","10 دقايق مذاكرة (مهمة واحدة صغيرة)","راحة حقيقية من غير موبايل","مشي 5 دقايق"],
+"طاقتي متوسطة":["20 دقيقة مذاكرة","راحة 10 دقايق","20 دقيقة مذاكرة تانية","مشي خفيف","وقت لنفسي (حاجة بحبها)"],
+"طاقتي جيدة":["25 دقيقة على المهمة الأصعب","راحة 5 دقايق","25 دقيقة تانية","حركة 15 دقيقة","وقت شخصي ومراجعة خفيفة"]};
+$("#energies").innerHTML=Object.keys(EN).map(k=>`<button class="opt">${k}</button>`).join("");
+$("#energies").onclick=e=>{const k=e.target.textContent;if(!EN[k])return;S.plan=EN[k].map(t=>({id:uid(),t,done:false}));save();renderPlan()};
+function renderPlan(){$("#planBox").hidden=!S.plan.length;$("#plan").innerHTML=S.plan.map(p=>`<div class="item ${p.done?"done":""}"><input type="checkbox" style="width:auto" data-c="${p.id}" ${p.done?"checked":""} aria-label="تم"><span>${esc(p.t)}</span><button class="btn sm" data-x="${p.id}" aria-label="احذف">✕</button></div>`).join("")}
+$("#plan").onclick=e=>{const c=e.target.dataset.c,x=e.target.dataset.x;if(c){const p=S.plan.find(p=>p.id==c);p.done=e.target.checked;if(p.done)logAch("التزمت بخطة مناسبة لطاقتي")}if(x)S.plan=S.plan.filter(p=>p.id!=x);save();renderPlan()};
+$("#planAdd").onclick=()=>{const v=$("#planIn").value.trim();if(!v)return;S.plan.push({id:uid(),t:v,done:false});$("#planIn").value="";save();renderPlan()};
+
+/* companion (scripted, honest) */
+const CRISIS=/انتحار|أنتحر|اموت|أموت|أنهي حياتي|اخلص من حياتي|أؤذي نفسي|اذي نفسي/;
+const R=[[/إحباط|محبط|فاشل|زهقت/,"شكلك تعبان من الإحساس ده. إيه أكتر حاجة بتحبطك دلوقتي؟"],[/ضغط|مضغوط|امتحان|منهج/,"الحمل شكله تقيل. لو قسمناه، إيه أصغر حاجة تحس إنها ممكنة النهارده؟"],[/قلق|خايف|خوف/,"القلق صعب. تحب نكتب سوا إيه اللي في إيدك وإيه اللي خارج إيدك؟"],[/تعبان|مرهق|منهك|مش قادر/,"ممكن تكون محتاج راحة قبل أي مذاكرة. جسمك محتاج إيه الأول: نوم، أكل، ولا هدوء؟"],[/وحيد|لوحدي|مفيش حد/,"أنا سامعك. وفي حد قريب منك ممكن تحكيله ولو بجملة واحدة؟"]];
+const DEF=["كمّل، أنا سامعك.","فاهم. إيه اللي كان أصعب حاجة في الموضوع ده؟","شكرًا إنك حكيت. تحب نختار خطوة صغيرة، ولا تفضّل بس تفضفض؟"];
+function addChat(w,t){S.chat.push({w,t});S.chat=S.chat.slice(-60);save();renderChat()}
+function renderChat(){const c=$("#chat");c.innerHTML=(S.chat.length?S.chat:[{w:"a",t:"أهلاً بيك. احكي اللي في بالك براحتك، ومفيش حاجة غلط."}]).map(m=>`<div class="m ${m.w}">${esc(m.t)}</div>`).join("");c.scrollTop=c.scrollHeight}
+function send(){const v=$("#chatIn").value.trim();if(!v)return;$("#chatIn").value="";addChat("u",v);
+ setTimeout(()=>{if(CRISIS.test(v))addChat("a","كلامك مهم وأنا واخده بجدية. أنا مش بديل عن شخص حقيقي. لو إنت في خطر دلوقتي، كلم حد قريب منك فورًا أو اتصل بالإسعاف أو بخدمة الطوارئ في بلدك. ولو تقدر، احكي لشخص موثوق إنك مش آمن. إنت تستاهل مساعدة.");else ai(v)},400)}
+function local(v){const r=R.find(r=>r[0].test(v));addChat("a",r?r[1]:pick(DEF))}
+async function ai(v){try{const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:S.chat.slice(-12)})});if(!r.ok)throw 0;const j=await r.json();if(!j.reply)throw 0;$("#aiNote").textContent="🤖 الرد بيتولد بالذكاء الاصطناعي (Gemini) وممكن يغلط. هو مش بديل عن مختص نفسي.";addChat("a",j.reply)}catch(e){local(v)}}
+$("#send").onclick=send;$("#chatIn").onkeydown=e=>{if(e.key==="Enter")send()};
+
+/* calm */
+let bt,bi=0;
+function stopB(){clearInterval(bt);$("#orb").style.transform="scale(1)";$("#orb").textContent="جاهز"}
+$("#bStart").onclick=()=>{stopB();const ph=[["شهيق",4,1.35],["احبس",2,1.35],["زفير",6,1]];let p=0,left=0,total=60;
+ const step=()=>{if(total<=0){stopB();$("#orb").textContent="تمام";logAch("أخدت راحة كنت محتاجها");toast("دقيقة هدوء كاملة. شكرًا لنفسك.");return}
+  if(left<=0){const x=ph[p%3];p++;left=x[1];$("#orb").textContent=x[0];$("#orb").style.transitionDuration=x[1]+"s";$("#orb").style.transform=`scale(${x[2]})`}left--;total--};
+ step();bt=setInterval(step,1000)};
+$("#bStop").onclick=stopB;
+$("#calmBtn").onclick=()=>{$("#calmOut").innerHTML="<p>1. حط رجليك على الأرض وحس بيها.<br>2. نزّل كتافك واسترخي فكك.<br>3. اشرب رشفة مية ببطء.<br>4. قول لنفسك: «اللحظة دي هتعدي».</p>"};
+$("#lessBtn").onclick=()=>{$("#calmOut").innerHTML="<p>خطة تخفيف الضغط:<br>• اختار حاجة واحدة بس النهارده.<br>• ابدأها 5 دقايق.<br>• الباقي مؤجل، مش مفقود.<br>• وبعدها استريح من غير ذنب.</p>"};
+$("#w1").value=S.w1||"";$("#w2").value=S.w2||"";
+$("#w1").oninput=e=>{S.w1=e.target.value;save()};$("#w2").oninput=e=>{S.w2=e.target.value;save()};
+
+/* study */
+let mins=10,left=600,tt=null;
+$("#mins").innerHTML=[5,10,15,25].map(m=>`<button class="opt ${m==10?"on":""}" data-m="${m}">${m} دقايق</button>`).join("");
+const clock=()=>{const m=Math.floor(left/60),s=left%60;$("#timer").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")};
+$("#mins").onclick=e=>{const m=+e.target.dataset.m;if(!m||tt)return;mins=m;left=m*60;clock();$$("#mins .opt").forEach(b=>b.classList.toggle("on",+b.dataset.m===m))};
+function endT(msg){clearInterval(tt);tt=null;left=mins*60;clock();$("#tStart").textContent="ابدأ";$("#tNote").textContent=msg||""}
+$("#tStart").onclick=()=>{if(tt){endT("وقفت. ومفيش مشكلة.");return}$("#tStart").textContent="وقّف";$("#tNote").textContent="خطوة واحدة بس. إنت شاطر إنك بدأت.";
+ tt=setInterval(()=>{left--;clock();if(left<=0){endT("خلص الوقت. خد راحة قصيرة لو حابب.");logAch("بدأت المذاكرة رغم عدم وجود حماس");toast("برافو، أخدت خطوة. استريح شوية.")}},1000)};
+$("#tEnd").onclick=()=>endT("تمام، كفاية كده النهارده. ده قرار سليم.");
+function renderTasks(){const t=S.tasks;$("#tasks").innerHTML=t.length?t.map(k=>`<div class="item ${k.done?"done":""}"><input type="checkbox" style="width:auto" data-c="${k.id}" ${k.done?"checked":""} aria-label="تمت"><span><b>${esc(k.sub||"")}</b> ${esc(k.n)}${k.step?`<br><small class="mute">أصغر خطوة: ${esc(k.step)}</small>`:""}</span>
+<button class="btn sm" data-sp="${k.id}">قسّمها</button><button class="btn sm" data-p="${k.id}">أجّلها</button><button class="btn sm" data-x="${k.id}" aria-label="احذف">✕</button></div>`).join(""):'<p class="mute">لسه مفيش مهام. أضف أول واحدة فوق.</p>'}
+$("#tAdd").onclick=()=>{const n=$("#tName").value.trim();if(!n){$("#tErr").textContent="اكتب اسم المهمة الأول.";return}$("#tErr").textContent="";S.tasks.push({id:uid(),sub:$("#tSub").value.trim(),n,done:false,step:""});$("#tName").value="";save();renderTasks()};
+$("#tasks").onclick=e=>{const d=e.target.dataset,i=S.tasks.findIndex(k=>k.id==(d.c||d.sp||d.p||d.x));if(i<0)return;const k=S.tasks[i];
+ if(d.c){k.done=e.target.checked;if(k.done){logAch("أنهيت مهمة صغيرة");toast(pick(["حلو أوي. كل خطوة بتحسب.","خلصت حاجة. خد نفس وافتخر بنفسك.","شغل جميل، وعلى قدك."]))}}
+ if(d.sp)k.step="اقرأ أول صفحتين لمدة 10 دقايق، ولخّص في سطرين";
+ if(d.p){S.tasks.splice(i,1);S.tasks.push(k);toast("اتأجلت لبعدين. مفيش فشل في كده.")}
+ if(d.x)S.tasks.splice(i,1);save();renderTasks()};
+$("#smallest").onclick=()=>{const k=S.tasks.find(k=>!k.done);if(!k){toast("أضف مهمة الأول.");return}mins=5;left=300;clock();$$("#mins .opt").forEach(b=>b.classList.toggle("on",b.dataset.m==5));$("#tNote").textContent="ابدأ بـ«"+(k.step||k.n)+"» لمدة 5 دقايق بس."};
+
+/* diary */
+const DQ=["من غير سؤال","إيه أكتر حاجة شغلت تفكيري النهارده؟","إيه الحاجة الصغيرة اللي أقدر أعملها؟","إيه اللي محتاج أدّيه لنفسي النهارده؟","إيه الحاجة اللي ممتن لوجودها؟"];
+$("#dQ").innerHTML=DQ.map((q,i)=>`<option value="${i}">${q}</option>`).join("");
+let editId=null;
+function renderDiary(){$("#dList").innerHTML=S.diary.length?S.diary.map(d=>`<div class="card"><div class="mute">${fmt(d.d)}${d.q?" — "+esc(d.q):""}</div><p style="white-space:pre-wrap">${esc(d.t)}</p><div class="row"><button class="btn sm" data-e="${d.id}">عدّل</button><button class="btn sm" data-x="${d.id}">احذف</button></div></div>`).join(""):'<p class="mute">لسه مفيش تدوينات. اكتب أول سطر لما تحب.</p>'}
+$("#dSave").onclick=()=>{const t=$("#dT").value.trim();if(!t){$("#dErr").textContent="اكتب حاجة الأول.";return}$("#dErr").textContent="";const qi=+$("#dQ").value,q=qi?DQ[qi]:"";
+ if(editId){const d=S.diary.find(d=>d.id==editId);d.t=t;d.q=q}else S.diary.unshift({id:uid(),t,q,d:Date.now()});
+ editId=null;$("#dT").value="";$("#dCancel").hidden=true;save();renderDiary();toast("اتحفظت.")};
+$("#dCancel").onclick=()=>{editId=null;$("#dT").value="";$("#dCancel").hidden=true};
+$("#dList").onclick=e=>{const d=e.target.dataset;if(d.x&&confirm("تحذف التدوينة دي؟")){S.diary=S.diary.filter(x=>x.id!=d.x);save();renderDiary()}
+ if(d.e){const x=S.diary.find(x=>x.id==d.e);editId=x.id;$("#dT").value=x.t;$("#dCancel").hidden=false;$("#dT").focus()}};
+
+/* progress */
+$("#achBtns").innerHTML=ACH.map(a=>`<button class="opt">${a}</button>`).join("");
+$("#achBtns").onclick=e=>{if(!ACH.includes(e.target.textContent))return;logAch(e.target.textContent);renderProg();toast("اتسجلت. تستاهل.")};
+function renderProg(){const w=S.ach.filter(a=>Date.now()-a.d<6048e5).length;$("#pBar").style.width=Math.min(100,w*10)+"%";
+ $("#pTxt").textContent=w?`الأسبوع ده سجلت ${w} إنجاز. لو الأسبوع كان هادي، ده كمان طبيعي.`:"لسه مفيش إنجازات الأسبوع ده، ومفيش مشكلة. ابدأ وقت ما تحب.";
+ $("#achList").innerHTML=S.ach.slice(0,15).map(a=>`<div class="item"><span>${esc(a.t)}</span><small class="mute">${fmt(a.d)}</small></div>`).join("")||'<p class="mute">فاضي دلوقتي.</p>'}
+
+renderPlan();renderChat();renderTasks();renderDiary();renderProg();clock();go("home");theme();
+</script>
+</body>
+</html>
